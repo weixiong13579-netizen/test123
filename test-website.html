@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+        }
+        
+        .question h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #3498db;
+            background-color: #f8f9fa;
+        }
+        
+        .option.selected {
+            border-color: #3498db;
+            background-color: #e3f2fd;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        button {
+            padding: 12px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .result {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .result p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .feature {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>性格测试</h1>
+        
+        <div class="question">
+            <h2>当你遇到一个新的挑战时，你会如何应对？</h2>
+            <div class="options">
+                <div class="option" data-value="1">
+                    <strong>A.</strong> 立即制定详细计划，一步一步完成
+                </div>
+                <div class="option" data-value="2">
+                    <strong>B.</strong> 先尝试不同方法，边做边调整
+                </div>
+                <div class="option" data-value="3">
+                    <strong>C.</strong> 寻求他人的建议和帮助
+                </div>
+                <div class="option" data-value="4">
+                    <strong>D.</strong> 分析可能的风险和困难，做好充分准备
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button id="submit-btn">提交答案</button>
+        </div>
+        
+        <div class="result" id="result">
+            <h2>你的性格特点</h2>
+            <div id="result-content"></div>
+        </div>
+    </div>
+    
+    <script>
+        // 选项选择功能
+        const options = document.querySelectorAll('.option');
+        let selectedOption = null;
+        
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                // 移除其他选项的选中状态
+                options.forEach(opt => opt.classList.remove('selected'));
+                // 添加当前选项的选中状态
+                this.classList.add('selected');
+                selectedOption = this.getAttribute('data-value');
+            });
+        });
+        
+        // 提交按钮功能
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            if (!selectedOption) {
+                alert('请选择一个选项！');
+                return;
+            }
+            
+            // 根据选择的选项生成结果
+            const resultContent = document.getElementById('result-content');
+            const resultDiv = document.getElementById('result');
+            
+            let features = '';
+            
+            switch(selectedOption) {
+                case '1':
+                    features = `
+                        <div class="feature">
+                            <strong>计划型人格</strong>
+                            <p>你是一个有条理、注重细节的人，喜欢在行动前做好充分准备。你善于制定计划并按部就班地执行，这种特质使你在需要系统性思考的任务中表现出色。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>可靠性</strong>
+                            <p>你是一个值得信赖的人，一旦承诺就会努力完成。你的朋友们可能会依赖你完成需要耐心和细心的任务。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>目标导向</strong>
+                            <p>你清楚自己的目标，并会通过具体的步骤去实现它们。这种专注使你在长期项目中表现卓越。</p>
+                        </div>
+                    `;
+                    break;
+                case '2':
+                    features = `
+                        <div class="feature">
+                            <strong>探索型人格</strong>
+                            <p>你是一个灵活、适应性强的人，喜欢通过尝试和错误来学习。你不害怕失败，而是将其视为成长的机会。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>创造力</strong>
+                            <p>你思维开放，善于提出创新的解决方案。在面对问题时，你往往能找到独特的方法来解决它们。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>行动力</strong>
+                            <p>你倾向于快速行动，不被过多的计划所束缚。这种特质使你在需要快速决策的情况下表现出色。</p>
+                        </div>
+                    `;
+                    break;
+                case '3':
+                    features = `
+                        <div class="feature">
+                            <strong>协作型人格</strong>
+                            <p>你是一个善于团队合作的人，重视他人的意见和建议。你明白集体的智慧往往超过个人的能力。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>同理心</strong>
+                            <p>你能够理解和感受他人的观点，这使你在人际关系中表现出色。你善于倾听和提供支持。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>适应性</strong>
+                            <p>你能够轻松适应不同的团队环境，与各种性格的人都能良好合作。这种特质使你在多元化的工作环境中如鱼得水。</p>
+                        </div>
+                    `;
+                    break;
+                case '4':
+                    features = `
+                        <div class="feature">
+                            <strong>分析型人格</strong>
+                            <p>你是一个理性、逻辑思维强的人，喜欢在行动前充分分析各种可能性。你善于识别潜在的问题并提前做好准备。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>谨慎性</strong>
+                            <p>你做事认真负责，不轻易冒险。你的谨慎使你在处理重要事务时能够避免不必要的错误。</p>
+                        </div>
+                        <div class="feature">
+                            <strong>深度思考</strong>
+                            <p>你喜欢深入思考问题的本质，而不是停留在表面。这种特质使你在需要复杂分析的任务中表现出色。</p>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            resultContent.innerHTML = features;
+            resultDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
